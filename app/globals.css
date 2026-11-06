@@ -1,0 +1,127 @@
+/*
+  PineryZ design tokens.
+
+  Initial choices from the implementation plan. These are not final
+  brand standards. Pages and components should read these variables
+  instead of hard-coding color, type, space, or borders.
+*/
+
+:root {
+  /* Color. Navy for dark surfaces, teal for the single accent, paper for light surfaces. */
+  --color-navy: #0b1c2c;
+  --color-navy-raised: #12283a;
+  --color-teal: #0f5f73;
+  --color-teal-hover: #0c4e5e;
+  --color-on-teal: #f4fbfc;
+  --color-white: #ffffff;
+  --color-paper: #f4f6f8;
+  --color-paper-raised: #fbfcfd;
+  --color-ink: #1a2330;
+  --color-ink-soft: #3d4a59;
+  --color-line: #d5dde6;
+  --color-line-inverse: rgba(244, 246, 248, 0.16);
+  --color-text-inverse: #f4f6f8;
+  --color-text-inverse-soft: #c5d0db;
+  --color-status: #6e6248;
+
+  /* Type. --font-plex-sans is set by next/font in the root layout. */
+  --font-sans: var(--font-plex-sans), "IBM Plex Sans", "Segoe UI", sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  --text-display-size: 36px;
+  --text-display-line: 1.15;
+  --text-display-tracking: -0.02em;
+  --text-title-size: 32px;
+  --text-title-line: 1.2;
+  --text-heading-size: 24px;
+  --text-heading-line: 1.3;
+  --text-body-size: 17px;
+  --text-body-line: 1.6;
+  --text-small-size: 15px;
+  --text-small-line: 1.5;
+  --text-eyebrow-size: 12px;
+  --text-eyebrow-line: 1.4;
+  --text-eyebrow-tracking: 0.08em;
+
+  /* Space. 4-point scale. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Layout. */
+  --layout-content: 1120px;
+  --layout-measure: 68ch;
+  --layout-gutter: 24px;
+
+  /* Breakpoints. Media queries below repeat these values because
+     custom properties are not valid inside media-query conditions. */
+  --bp-tablet: 720px;
+  --bp-desktop: 1024px;
+
+  /* Borders. No shadow on marketing surfaces. */
+  --radius: 4px;
+  --border-width: 1px;
+  --border-light: var(--border-width) solid var(--color-line);
+  --border-inverse: var(--border-width) solid var(--color-line-inverse);
+
+  /* Motion and focus. */
+  --duration-fast: 150ms;
+  --duration-menu: 200ms;
+  --focus-ring: 2px solid var(--color-teal);
+  --focus-offset: 2px;
+}
+
+@media (min-width: 720px) {
+  :root {
+    --layout-gutter: 32px;
+    --text-display-size: 56px;
+    --text-display-line: 1.08;
+    --text-title-size: 40px;
+    --text-title-line: 1.15;
+    --text-heading-size: 28px;
+    --text-heading-line: 1.25;
+    --text-body-size: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-menu: 0ms;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--text-body-line);
+}
+
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
