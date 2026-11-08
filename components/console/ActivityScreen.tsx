@@ -14,7 +14,7 @@ export function ActivityScreen() {
     <>
       <PageHeader
         title="Transaction History"
-        lede="Creation transactions stored by the registry. Deposit and withdrawal transactions are not available in this demonstration."
+        lede="Creation transactions stored by the registry. Deposit and redemption receipts stay on Ethereum Sepolia and are linked from the vault after the wallet confirms them."
       />
       {state.status === "loading" ? <LoadingState /> : null}
       {state.status === "error" ? <ErrorState code={state.code} onRetry={reload} /> : null}

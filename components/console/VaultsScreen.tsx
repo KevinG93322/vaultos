@@ -13,14 +13,14 @@ export function VaultsScreen() {
     <>
       <PageHeader
         title="My Vaults"
-        lede="Vaults recorded by the registry after an independent deployment check. This list does not include balances."
+        lede="Registered vaults returned by the registry for this network. Open a vault to read the metadata the backend verified and stored."
       />
       {state.status === "loading" ? <LoadingState /> : null}
       {state.status === "error" ? <ErrorState code={state.code} onRetry={reload} /> : null}
       {state.status === "ready" && state.vaults.length === 0 ? (
         <EmptyState title="No vaults registered">
-          No vault records were returned.{" "}
-          <Link href="/create">Register a creation transaction</Link> after it has been submitted from a wallet.
+          The registry returned no vaults. A vault appears here after its creation transaction is verified.{" "}
+          <Link href="/create">Create a vault</Link>.
         </EmptyState>
       ) : null}
       {state.status === "ready" && state.vaults.length > 0 ? <VaultRows vaults={state.vaults} /> : null}

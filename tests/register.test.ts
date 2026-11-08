@@ -116,10 +116,26 @@ describe("vault registration", () => {
     const { store } = await registered();
     const result = await registerVault(
       store,
-      fakeReader({ getReceipt: async () => validReceipt({ to: OTHER_FACTORY }) }),
+      fakeReader({ getReceipt: async () => validReceipt({ to: OTHER_FACTORY, events: [] }) }),
       { chainId: CHAIN_ID, txHash: TX_HASH },
     );
     expect(result).toMatchObject({ ok: false, reason: "unauthorized_factory" });
+  });
+
+  it("registers a vault when another contract forwards the factory call", async () => {
+    const { store } = await registered();
+    const result = await registerVault(
+      store,
+      fakeReader({
+        getReceipt: async () =>
+          validReceipt({ to: "0x00000000000000000000000000000000000000aa" }),
+      }),
+      { chainId: CHAIN_ID, txHash: TX_HASH },
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.vault.vaultAddress).toBe(VAULT);
+    expect(result.vault.factoryAddress).toBe(FACTORY);
   });
 
   it("rejects a contract-creation transaction", async () => {

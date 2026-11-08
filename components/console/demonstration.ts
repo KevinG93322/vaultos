@@ -1,5 +1,7 @@
-export const DEMONSTRATION_CHAIN_ID = 84532;
-export const DEMONSTRATION_NETWORK = "Base Sepolia Testnet";
+import { ETHEREUM_SEPOLIA_CHAIN_ID, ETHEREUM_SEPOLIA_NETWORK, networkName } from "@/lib/vaultos/network";
+
+export const DEMONSTRATION_CHAIN_ID = ETHEREUM_SEPOLIA_CHAIN_ID;
+export const DEMONSTRATION_NETWORK = ETHEREUM_SEPOLIA_NETWORK;
 export const DEMONSTRATION_LABEL = "Technical demonstration";
 
 const TX_HASH = /^0x[0-9a-fA-F]{64}$/;
@@ -9,7 +11,7 @@ export function isTransactionHash(value: string): boolean {
 }
 
 export function chainLabel(chainId: number): string {
-  return chainId === DEMONSTRATION_CHAIN_ID ? "Base Sepolia" : `Chain ${chainId}`;
+  return networkName(chainId);
 }
 
 export function shortenHex(value: string, lead = 6, tail = 4): string {

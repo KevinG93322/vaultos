@@ -16,7 +16,7 @@ export function OverviewScreen() {
     <>
       <PageHeader
         title="Overview"
-        lede="Registry metadata for the VaultOS technical demonstration. Asset balances and share balances remain on the chain and are not shown here."
+        lede="Registry metadata for vaults verified on Ethereum Sepolia. Open a vault to read balances, deposit vUSD, and redeem shares."
       />
       {state.status === "loading" ? <LoadingState /> : null}
       {state.status === "error" ? <ErrorState code={state.code} onRetry={reload} /> : null}

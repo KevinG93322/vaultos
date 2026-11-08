@@ -74,15 +74,17 @@ export async function registerVault(
 
   let receipt;
   try {
-    receipt = await reader.getReceipt(txHash);
+    receipt = await reader.getReceipt(txHash, factory as Address);
   } catch {
     return fail(503, "rpc_unavailable");
   }
   if (!receipt) return fail(422, "receipt_not_found");
   if (receipt.status !== "success") return fail(422, "transaction_failed");
-  if (!receipt.to || receipt.to.toLowerCase() !== factory) return fail(422, "unauthorized_factory");
   if (receipt.eventInvalid || receipt.events.length > 1) return fail(422, "event_invalid");
-  if (receipt.events.length === 0) return fail(422, "event_missing");
+  if (receipt.events.length === 0) {
+    if (!receipt.to || receipt.to.toLowerCase() !== factory) return fail(422, "unauthorized_factory");
+    return fail(422, "event_missing");
+  }
 
   const created = receipt.events[0];
   eventFound = true;

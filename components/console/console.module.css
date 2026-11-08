@@ -38,6 +38,7 @@
 }
 
 .menuButton,
+.walletButton,
 .primaryButton,
 .secondaryButton {
   border-radius: var(--radius);
@@ -47,6 +48,7 @@
 }
 
 .menuButton,
+.walletButton,
 .secondaryButton {
   border: var(--border-width) solid var(--color-line);
   background: var(--color-white);
@@ -54,7 +56,8 @@
   padding: var(--space-2) var(--space-3);
 }
 
-.menuButton {
+.menuButton,
+.walletButton {
   border-color: var(--color-line-inverse);
   background: transparent;
   color: var(--color-text-inverse);
@@ -69,13 +72,17 @@
 
 .primaryButton:hover,
 .secondaryButton:hover,
-.menuButton:hover {
+.menuButton:hover,
+.walletButton:hover {
   background: var(--color-teal-hover);
   color: var(--color-on-teal);
   border-color: var(--color-teal-hover);
 }
 
-.primaryButton:disabled {
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.menuButton:disabled,
+.walletButton:disabled {
   cursor: wait;
   opacity: 0.7;
 }
@@ -99,9 +106,61 @@
   font-size: var(--text-small-size);
 }
 
+.topbarTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+.walletSession {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.walletAddress {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  margin: 0;
+  color: var(--color-text-inverse);
+  font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", monospace;
+  font-size: var(--text-small-size);
+}
+
+.walletNetwork {
+  color: var(--color-text-inverse-soft);
+  font-family: var(--font-plex-sans), "IBM Plex Sans", sans-serif;
+  font-size: var(--text-eyebrow-size);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--text-eyebrow-tracking);
+  line-height: var(--text-eyebrow-line);
+  text-transform: uppercase;
+}
+
+.networkBanner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--layout-gutter);
+  background: var(--color-white);
+  border-bottom: var(--border-light);
+}
+
+.networkBanner p {
+  flex: 1 1 16rem;
+  margin: 0;
+}
+
 .badge {
   margin: 0;
-  margin-left: auto;
   padding: var(--space-1) var(--space-3);
   border: var(--border-inverse);
   border-radius: var(--radius);
@@ -330,9 +389,16 @@
 }
 
 .record p,
+.record > div,
 .fields dd {
   margin: 0;
   overflow-wrap: anywhere;
+}
+
+.creationMeta {
+  margin: var(--space-1) 0 0;
+  color: var(--color-ink-soft);
+  font-size: var(--text-small-size);
 }
 
 .fieldLabel {
@@ -398,6 +464,25 @@
   font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", monospace;
 }
 
+.textInput {
+  font-family: var(--font-sans);
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
 .help,
 .formError {
   margin: 0;
@@ -435,10 +520,30 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .record {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .record > :first-child {
+    grid-column: 1 / -1;
+  }
+
+  .fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6) var(--space-8);
+  }
+}
+
+@media (min-width: 1100px) {
+  .record > :first-child {
+    grid-column: auto;
+  }
+
   .record,
   .recordHead {
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 0.9fr);
-    align-items: center;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.55fr) minmax(0, 0.95fr) minmax(0, 0.9fr) minmax(0, 1.05fr);
+    align-items: start;
   }
 
   .recordHead {
@@ -458,11 +563,6 @@
     height: 1px;
     overflow: hidden;
     clip: rect(0 0 0 0);
-  }
-
-  .fields {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-6) var(--space-8);
   }
 }
 
@@ -495,8 +595,9 @@
 }
 
 @media (max-width: 719px) {
-  .badge {
+  .topbarTools {
     flex-basis: 100%;
+    justify-content: flex-start;
     margin-left: 0;
   }
 }

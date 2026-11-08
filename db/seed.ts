@@ -1,4 +1,5 @@
 import { readRuntimeConfig } from "@/lib/vaultos/config";
+import { networkName } from "@/lib/vaultos/network";
 import { getVaultStore } from "@/db/client";
 
 const config = readRuntimeConfig();
@@ -10,7 +11,7 @@ if (!config) {
 const store = await getVaultStore();
 await store.saveNetwork({
   chainId: config.chainId,
-  name: config.chainId === 84532 ? "Base Sepolia" : `Chain ${config.chainId}`,
+  name: networkName(config.chainId),
   factoryAddress: config.factoryAddress,
   status: "demo",
 });

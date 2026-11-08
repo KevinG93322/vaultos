@@ -4,6 +4,7 @@ import { getVaultStore } from "@/db/client";
 import { readRuntimeConfig } from "@/lib/vaultos/config";
 import { parseChainId, parseRegistrationBody } from "@/lib/vaultos/http";
 import { registerVault } from "@/lib/vaultos/register";
+import { networkName } from "@/lib/vaultos/network";
 import { createViemReader } from "@/lib/vaultos/viemReader";
 
 export const dynamic = "force-dynamic";
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
     const store = await getVaultStore();
     await store.saveNetwork({
       chainId: config.chainId,
-      name: config.chainId === 84532 ? "Base Sepolia" : `Chain ${config.chainId}`,
+      name: networkName(config.chainId),
       factoryAddress: config.factoryAddress,
       status: "demo",
     });

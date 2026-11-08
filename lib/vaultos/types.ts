@@ -70,7 +70,7 @@ export type VaultChainView = {
 
 export interface ChainReader {
   getChainId(): Promise<number>;
-  getReceipt(hash: Hash): Promise<ReceiptView | null>;
+  getReceipt(hash: Hash, factory: Address): Promise<ReceiptView | null>;
   readFactory(factory: Address): Promise<FactoryView>;
   readVault(factory: Address, vault: Address): Promise<VaultChainView>;
   readAssetMetadata(asset: Address): Promise<{ symbol: string; decimals: number }>;

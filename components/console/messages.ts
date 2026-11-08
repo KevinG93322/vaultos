@@ -2,7 +2,7 @@ const REGISTRY_MESSAGES: Record<string, string> = {
   service_unconfigured:
     "The registry is not configured on this server. Vault records cannot be loaded until the database, RPC, chain, and factory settings are present.",
   database_error: "The registry could not complete the request. No new record was confirmed.",
-  chain_mismatch: "The registry is not accepting chain 84532 for this request.",
+  chain_mismatch: "The registry only accepts chain 11155111 for this request.",
   not_found: "This address is not in the vault registry.",
   invalid_input: "The submitted value is not valid.",
   request_failed: "The registry request failed.",

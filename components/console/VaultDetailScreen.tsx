@@ -3,10 +3,13 @@
 import Link from "next/link";
 
 import type { VaultRecord } from "@/lib/vaultos/types";
+import { ETHEREUM_SEPOLIA_CHAIN_ID } from "@/lib/vaultos/network";
 
+import { ChainLink } from "./ChainLink";
 import { assetKindLabel, chainLabel, verificationLabel } from "./demonstration";
 import { ErrorState, LoadingState, PageHeader } from "./RegistryStatus";
 import styles from "./console.module.css";
+import { VaultActions } from "./VaultActions";
 import { useVault } from "./useVaultRegistry";
 
 export function VaultDetailScreen({ address }: { address: string }) {
@@ -36,36 +39,57 @@ export function VaultDetailScreen({ address }: { address: string }) {
 
 function Detail({ vault }: { vault: VaultRecord }) {
   const fields = [
-    { label: "Share name", value: vault.name, mono: false },
-    { label: "Share symbol", value: vault.symbol, mono: false },
-    { label: "Vault address", value: vault.vaultAddress, mono: true },
-    { label: "Chain", value: `${chainLabel(vault.chainId)} (${vault.chainId})`, mono: false },
-    { label: "Underlying asset", value: vault.assetSymbol, mono: false },
-    { label: "Asset address", value: vault.assetAddress, mono: true },
-    { label: "Asset decimals", value: String(vault.assetDecimals), mono: false },
-    { label: "Asset kind", value: assetKindLabel(vault.kind), mono: false },
-    { label: "Asset verification", value: verificationLabel(vault.verificationStatus), mono: false },
-    { label: "Deployer", value: vault.deployer, mono: true },
-    { label: "Factory", value: vault.factoryAddress, mono: true },
-    { label: "Creation transaction", value: vault.creationTxHash, mono: true },
-    { label: "Implementation address", value: vault.implementationAddress, mono: true },
-    { label: "Code hash", value: vault.codeHash, mono: true },
+    { label: "Share name", value: vault.name, kind: "text" as const },
+    { label: "Share symbol", value: vault.symbol, kind: "text" as const },
+    { label: "Vault address", value: vault.vaultAddress, kind: "address" as const },
+    { label: "Chain", value: `${chainLabel(vault.chainId)} (${vault.chainId})`, kind: "text" as const },
+    { label: "Underlying asset", value: vault.assetSymbol, kind: "text" as const },
+    { label: "Asset address", value: vault.assetAddress, kind: "address" as const },
+    { label: "Asset decimals", value: String(vault.assetDecimals), kind: "text" as const },
+    { label: "Asset kind", value: assetKindLabel(vault.kind), kind: "text" as const },
+    { label: "Asset verification", value: verificationLabel(vault.verificationStatus), kind: "text" as const },
+    { label: "Deployer", value: vault.deployer, kind: "address" as const },
+    { label: "Factory", value: vault.factoryAddress, kind: "address" as const },
+    { label: "Creation transaction", value: vault.creationTxHash, kind: "tx" as const },
+    { label: "Implementation address", value: vault.implementationAddress, kind: "address" as const },
+    { label: "Code hash", value: vault.codeHash, kind: "code" as const },
   ];
 
   return (
     <>
       <PageHeader
         title={vault.name}
-        lede="Metadata stored after deployment verification. Balances and share positions are not read in this demonstration."
+        lede="Registry metadata from deployment verification, followed by balances read from Ethereum Sepolia."
       />
       <dl className={styles.fields}>
         {fields.map((field) => (
           <div key={field.label}>
             <dt>{field.label}</dt>
-            <dd>{field.mono ? <code>{field.value}</code> : field.value}</dd>
+            <dd>
+              <FieldValue chainId={vault.chainId} kind={field.kind} value={field.value} />
+            </dd>
           </div>
         ))}
       </dl>
+      {vault.chainId === ETHEREUM_SEPOLIA_CHAIN_ID ? <VaultActions vault={vault} /> : null}
     </>
+  );
+}
+
+function FieldValue({
+  chainId,
+  kind,
+  value,
+}: {
+  chainId: number;
+  kind: "text" | "address" | "tx" | "code";
+  value: string;
+}) {
+  if (kind === "text") return value;
+  if (chainId !== ETHEREUM_SEPOLIA_CHAIN_ID || kind === "code") return <code>{value}</code>;
+  return (
+    <ChainLink kind={kind} value={value}>
+      <code>{value}</code>
+    </ChainLink>
   );
 }

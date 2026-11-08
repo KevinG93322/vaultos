@@ -17,19 +17,19 @@ class ViemReader implements ChainReader {
     return this.client.getChainId();
   }
 
-  async getReceipt(hash: Hash): Promise<ReceiptView | null> {
+  async getReceipt(hash: Hash, factory: Address): Promise<ReceiptView | null> {
     const receipt = await this.client.getTransactionReceipt({ hash }).catch((error: unknown) => {
       if (isMissingReceipt(error)) return null;
       throw error;
     });
     if (!receipt) return null;
 
-    const target = receipt.to?.toLowerCase() ?? null;
+    const factoryAddress = factory.toLowerCase();
     const events: CreatedEvent[] = [];
     let eventInvalid = false;
     for (const log of receipt.logs) {
       if (log.topics[0] !== vaultCreatedTopic) continue;
-      if (!target || log.address.toLowerCase() !== target) continue;
+      if (log.address.toLowerCase() !== factoryAddress) continue;
       try {
         const decoded = decodeEventLog({
           abi: factoryAbi,

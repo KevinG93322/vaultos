@@ -1,21 +1,30 @@
 "use client";
 
+import {
+  DEPLOYER_ADDRESS,
+  ETHEREUM_SEPOLIA_CURRENCY,
+  SEPOLIA_EXPLORER_URL,
+  TEST_ASSET_ADDRESS,
+  VAULT_FACTORY_ADDRESS,
+} from "@/lib/vaultos/network";
+
+import { ChainLink } from "./ChainLink";
 import { DEMONSTRATION_CHAIN_ID, DEMONSTRATION_LABEL, DEMONSTRATION_NETWORK } from "./demonstration";
 import { registryMessage } from "./messages";
 import { PageHeader } from "./RegistryStatus";
 import styles from "./console.module.css";
 import { useVaultList } from "./useVaultRegistry";
+import { useWallet } from "./wallet";
 
 const unavailable = [
-  "Wallet connection and transaction signing",
-  "Vault creation from this browser",
-  "Deposits and withdrawals",
-  "Asset balances and share balances",
-  "Base Sepolia contract deployment from this console",
+  "Deployment of new contracts from this console",
+  "Ethereum Mainnet",
+  "Storage of wallet keys or wallet passwords",
 ];
 
 export function SettingsScreen() {
   const { state, reload } = useVaultList();
+  const wallet = useWallet();
   const factory =
     state.status === "ready" && state.vaults.length > 0 ? state.vaults[0].factoryAddress : null;
 
@@ -40,6 +49,58 @@ export function SettingsScreen() {
             <dt>Network</dt>
             <dd>
               {DEMONSTRATION_NETWORK} · chain id {DEMONSTRATION_CHAIN_ID}
+            </dd>
+          </div>
+          <div>
+            <dt>Gas currency</dt>
+            <dd>{ETHEREUM_SEPOLIA_CURRENCY}</dd>
+          </div>
+          <div>
+            <dt>Wallet</dt>
+            <dd>
+              {wallet.status === "connected" && wallet.address ? (
+                <>
+                  <ChainLink kind="address" value={wallet.address}>
+                    <code>{wallet.address}</code>
+                  </ChainLink>
+                  {wallet.onSepolia ? " · Ethereum Sepolia" : ` · chain ${wallet.chainId}`}
+                </>
+              ) : (
+                "No wallet is connected in this console."
+              )}
+            </dd>
+          </div>
+          <div>
+            <dt>TestAsset (vUSD)</dt>
+            <dd>
+              <ChainLink kind="address" value={TEST_ASSET_ADDRESS}>
+                <code>{TEST_ASSET_ADDRESS}</code>
+              </ChainLink>
+            </dd>
+          </div>
+          <div>
+            <dt>VaultFactory</dt>
+            <dd>
+              <ChainLink kind="address" value={VAULT_FACTORY_ADDRESS}>
+                <code>{VAULT_FACTORY_ADDRESS}</code>
+              </ChainLink>
+            </dd>
+          </div>
+          <div>
+            <dt>Deployer</dt>
+            <dd>
+              <ChainLink kind="address" value={DEPLOYER_ADDRESS}>
+                <code>{DEPLOYER_ADDRESS}</code>
+              </ChainLink>
+            </dd>
+          </div>
+          <div>
+            <dt>Explorer</dt>
+            <dd>
+              <a href={SEPOLIA_EXPLORER_URL} target="_blank" rel="noreferrer">
+                {SEPOLIA_EXPLORER_URL}
+                <span className={styles.srOnly}> (opens in a new tab)</span>
+              </a>
             </dd>
           </div>
           <div>
